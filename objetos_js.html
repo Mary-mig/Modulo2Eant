@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title> Objetos en JavaScript</title>
+	</head>
+	<body>
+		<h1>Objetos en JavaScript </h1>
+
+		<script>
+			const crearProducto =  function (n, s, p, d){
+
+				let elProducto =  new Object ()
+
+				//	Propiedades
+				elProducto.nombre = n
+				elProducto.stock = s
+				elProducto.precio = p
+				elProducto.disponible = d
+
+				//Metodos 
+				elProducto.Mostrar = function (){ //<-- Closure (funcion creada dentrp de otra funcion)
+
+					window.document.write(`<p>Existen ${elProducto.stock}  unid. de <strong>${elProducto.nombre} </strong> que valen ARG ${elProducto.precio} c/u.</p>`)
+
+				}
+
+				return elProducto
+			}
+
+			/////////////////////////////7
+
+
+			//Datos en variables sueltas
+			let nombre = "Cafe" // string
+ 			let stock = 500  //number
+			let precio = 68.55 // number float
+			let disponible = true //booleano
+
+			// Datos en una colección Array
+
+			let producto = ["Jugo", 520, 68.55, false]
+
+			//Datos en un objeto (literal)
+			let otroProducto= {
+				nombre: "Agua finamente gasificada",
+				stock: 750,
+				precio:85.45,
+				disponible:true
+			}
+
+			//Datos en un objeto (diferido)--> el objeto se crea vacio y luego se le van definiendo las propiedades y su valor
+			let tercerProducto = new Object()
+			
+			tercerProducto.nombre = "Te de Hierbas Orientales"
+			tercerProducto.stock = 150
+			tercerProducto.precio = 135.65
+			tercerProducto.disponible = false
+
+			let cuartoProducto = crearProducto("Malbec", 450, 185.99, true)
+			let ultimoProducto = crearProducto("Jugo",300, 87.55,true)
+
+			cuartoProducto.Mostrar()
+			ultimoProducto.Mostrar()
+
+			//Imprimir producto
+			//ES5
+			//window.document.write("Hay "+ tercerProducto.stock +" unid. de " + tercerProducto.nombre + " que valen ARG" +tercerProducto.precio+" c/u")
+
+			//ES6
+			//window.document.write(`Existen ${ultimoProducto.stock}  unid. de ${ultimoProducto.nombre}  que valen ARG ${ultimoProducto.precio} c/u`)//<-- Template string
+
+		</script>
+	</body>
+</html>
