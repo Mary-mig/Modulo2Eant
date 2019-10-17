@@ -56,5 +56,20 @@ class Producto {
 
 	 }
 
-	// Metodos de Clase
+	// Metodos de Clase (estatico)
+	static parse(json){//<-- Aca ingresan los datos del json
+		let datos = JSON.parse (json)//<-- de JSON a Object
+
+		console.log("Estos son los datos")
+		console.log(datos)
+
+		if(datos instanceof Array){
+			console.log("Voy a convertir muchos Object en Producto")
+		}else if (datos instanceof Object){
+			console.log("Voy a convertir un Object en Producto")
+		}else {
+			console.log("ya fue.. no convierto nada en Producto")
+		}
+		
+	}
 }
