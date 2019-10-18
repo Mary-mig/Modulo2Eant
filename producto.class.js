@@ -64,11 +64,27 @@ class Producto {
 		console.log(datos)
 
 		if(datos instanceof Array){
-			console.log("Voy a convertir muchos Object en Producto")
+			//1) Crear un Array nuevo para guardar los Objetos Producto
+			let productos = new Array () 
+
+			//2) Recorrer el array de object para instanciar objetos producto
+			datos.forEach(item => {
+			
+			//3) Instanciar Objeto Producto con los datos de cada Object
+				let producto = new Producto(item.nombre,item.stock,item.precio,item.disponible)
+			
+			//4) Guardar el objeto Producto instanciado en el Array	nuevo
+				productos.push(producto) //<-- meter items adentro de una coleccion
+
+			})
+			//5) Retornar el Array nuevo una vez que se hayan  instanciado todos los objetos Producto
+			return productos
+
 		}else if (datos instanceof Object){
-			console.log("Voy a convertir un Object en Producto")
+			let producto = new Producto(datos.nombre,datos.stock,datos.precio,datos.disponibilidad)//<-- Si el JSON tuviera un solo dato no hace falta armar el array ni el for each
+			return producto
 		}else {
-			console.log("ya fue.. no convierto nada en Producto")
+			console.error("ya fue.. no convierto nada en Producto")
 		}
 		
 	}
