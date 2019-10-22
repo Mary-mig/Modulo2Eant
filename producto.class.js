@@ -1,11 +1,12 @@
 class Producto {
 
 	//Constructor: es una funcion que recibe los datos y los asigna a propiedades
-	constructor(n,s,p,d = true){
+	constructor(n,s,p,i,d = true){
 		//Atributos
 		this.nombre = n
 		this.stock = s
 		this.precio = p
+		this.imagen = i
 		this.disponibilidad = d //<-- por default asigna "true"
 	}
 
@@ -64,25 +65,14 @@ class Producto {
 		console.log(datos)
 
 		if(datos instanceof Array){
-			//1) Crear un Array nuevo para guardar los Objetos Producto
-			let productos = new Array () 
-
-			//2) Recorrer el array de object para instanciar objetos producto
-			datos.forEach(item => {
+			 
+		//1) Recorrer el array de object para instanciar objetos producto y retornarlos
+		 return datos.map(item => new Producto(item.Nombre,item.Stock,item.Precio,item.Imagen))
 			
-			//3) Instanciar Objeto Producto con los datos de cada Object
-				let producto = new Producto(item.nombre,item.stock,item.precio,item.disponible)
-			
-			//4) Guardar el objeto Producto instanciado en el Array	nuevo
-				productos.push(producto) //<-- meter items adentro de una coleccion
-
-			})
-			//5) Retornar el Array nuevo una vez que se hayan  instanciado todos los objetos Producto
-			return productos
-
 		}else if (datos instanceof Object){
-			let producto = new Producto(datos.nombre,datos.stock,datos.precio,datos.disponibilidad)//<-- Si el JSON tuviera un solo dato no hace falta armar el array ni el for each
-			return producto
+		 
+		 return new Producto(datos.Nombre,datos.Stock,datos.Precio,datos.Imagen)//<-- Si el JSON tuviera un solo dato no hace falta armar el array ni el for each
+			
 		}else {
 			console.error("ya fue.. no convierto nada en Producto")
 		}
