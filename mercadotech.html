@@ -58,17 +58,27 @@
 		<script src="https://blackrockdigital.github.io/startbootstrap-shop-item/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 		<script src= "producto.class.js"></script>
 		<script>
-		/*
-			let unaSimplePrueba= new Producto("Prueba, 400, 12.45, false")
-			console.log (unaSimplePrueba)
-		*/
+		
+		/*Persistencia en JS con la API Storage */
+		//window.localStorage & window.sessionStorage//
 
+		//window.localStorage.setItem("USUARIOS","Tambien voy a guardar los datos de los usuarios:(")// crea el storage. Primer argumento es el nombre del storage, el segundo el dato que almacenamos
+		//alert(window.localStorage.getItem("PRODUCTOS"))
+		//window.localStorage.removeItem("USUARIOS")//--> remueve el item que mencione 
+		//window.localStorage.clear()//--> vacia todo
+
+		// YO, JS PROMETO CONVERTIR MOSTRAR PRODUCTOS CUANDO TENGA DATOS// encadena acciones y reacciones, si se cumplio la condición se ejecuta 
+		
+		///////////////////////////////////////////////////
 		const miniChrome =  new XMLHttpRequest()
 		miniChrome.open ("GET","https://api.myjson.com/bins/dcg2p")
 		miniChrome.onload = function (){ 
 			
 			if (this.status == 200){
 			
+			// Guardar los datos de la peticion
+			window.localStorage.setItem("PRODUCTOS",this.response )
+
 		 	let productos = Producto.parse(this.response) 
 		 	productos.forEach(producto =>{
 			 		//console.log(producto)
