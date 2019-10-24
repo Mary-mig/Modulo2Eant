@@ -68,8 +68,37 @@
 		//window.localStorage.clear()//--> vacia todo
 
 		// YO, JS PROMETO CONVERTIR MOSTRAR PRODUCTOS CUANDO TENGA DATOS// encadena acciones y reacciones, si se cumplio la condición se ejecuta 
+
+		const promesa = new Promise(function(ok,error){
+		  window.setTimeout(function(){
+			
+			let numerito = Math.random()
+
+			if (numerito ()<0.5){
+				ok(`${numerito} vale menos que o,5`)//<-- sejecuta en then
+			}else{
+			  error (`noooo!!!...${numerito} vale mas que 0,5`)	//<-- se ejecuta en catch
+			}
+
+			},2000)//<-- despues de X segundos
+		})
+
+		promesa.then (function(rta){     //<-- esto ocurre cuando sale bien
+			alert(`${rta} (si lees esto es porque estas dentro del metodo then)`)
+
+		}) 
 		
+		promesa.catch(function(rta){ //<-- esto ocurre cuando sale mal
+			alert(`${rta} (y si lees esto es porque estas dentro del metodo catch)`)
+		})	
+
+		promesa.finally (function(){
+			confirm("se entendio?")
+		})
 		///////////////////////////////////////////////////
+
+		if(!window.localStorage.getItem("PRODUCTOS")){
+		//Si NO existe el LS.... traer los datos de la API
 		const miniChrome =  new XMLHttpRequest()
 		miniChrome.open ("GET","https://api.myjson.com/bins/dcg2p")
 		miniChrome.onload = function (){ 
@@ -81,13 +110,23 @@
 
 		 	let productos = Producto.parse(this.response) 
 		 	productos.forEach(producto =>{
-			 		//console.log(producto)
-			 		producto.Mostrar()
+			 	producto.Mostrar()
 			 	})
 			 }
 
 		}
 		miniChrome.send()
+	}else{
+		//Sino efectivamente existe un LS, entonces usarlo para crear/mostrar objetos Producto
+		//alert("Si se lee esto es porque hay un localStorage PRODUCTOS :D")
+
+		let productos = Producto.parse (window.localStorage.getItem("PRODUCTOS"))
+
+		productos.forEach(producto =>{
+			producto.Mostrar()
+		})
+	}
 		</script>
+	
 	</body>
 </html>
