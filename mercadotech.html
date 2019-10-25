@@ -70,62 +70,56 @@
 		// YO, JS PROMETO CONVERTIR MOSTRAR PRODUCTOS CUANDO TENGA DATOS// encadena acciones y reacciones, si se cumplio la condición se ejecuta 
 
 		const promesa = new Promise(function(ok,error){
-		  window.setTimeout(function(){
-			
-			let numerito = Math.random()
-
-			if (numerito ()<0.5){
-				ok(`${numerito} vale menos que o,5`)//<-- sejecuta en then
-			}else{
-			  error (`noooo!!!...${numerito} vale mas que 0,5`)	//<-- se ejecuta en catch
-			}
-
-			},2000)//<-- despues de X segundos
-		})
-
-		promesa.then (function(rta){     //<-- esto ocurre cuando sale bien
-			alert(`${rta} (si lees esto es porque estas dentro del metodo then)`)
-
-		}) 
-		
-		promesa.catch(function(rta){ //<-- esto ocurre cuando sale mal
-			alert(`${rta} (y si lees esto es porque estas dentro del metodo catch)`)
-		})	
-
-		promesa.finally (function(){
-			confirm("se entendio?")
-		})
-		///////////////////////////////////////////////////
-
-		if(!window.localStorage.getItem("PRODUCTOS")){
+		 
+		 if(!window.localStorage.getItem("PRODUCTOS")){
 		//Si NO existe el LS.... traer los datos de la API
 		const miniChrome =  new XMLHttpRequest()
 		miniChrome.open ("GET","https://api.myjson.com/bins/dcg2p")
 		miniChrome.onload = function (){ 
-			
 			if (this.status == 200){
 			
 			// Guardar los datos de la peticion
 			window.localStorage.setItem("PRODUCTOS",this.response )
 
-		 	let productos = Producto.parse(this.response) 
-		 	productos.forEach(producto =>{
-			 	producto.Mostrar()
-			 	})
-			 }
-
+			ok(this.response) //<-- Ejecutar el metodo then()...
+			{ else }
+			 	this.onerror()
+		 	}
 		}
-		miniChrome.send()
+		miniChrome.onerror = function(){ //<-- Peticion no exitosa
+			error (this.statusText)
+			console.log (this)
+		}
+		miniChrome.send() //<-- ejecutar la peticion asincronica(.. esperar a que responda el server)
 	}else{
-		//Sino efectivamente existe un LS, entonces usarlo para crear/mostrar objetos Producto
+		//Sino... efectivamente existe un LS, entonces usarlo para crear/mostrar objetos Producto
 		//alert("Si se lee esto es porque hay un localStorage PRODUCTOS :D")
-
-		let productos = Producto.parse (window.localStorage.getItem("PRODUCTOS"))
-
-		productos.forEach(producto =>{
-			producto.Mostrar()
-		})
+		ok (window.localStorage.getItem("PRODUCTOS"))//<-- ejecutar el metodo then()...
 	}
+})
+
+		promesa.then (function(rta){     //<-- esto ocurre cuando hay datos (desde una API o de un LS)
+			//Usar los daros para crear/mostrar obejto Producto
+			let productos = Producto.parse (rta)
+
+			productos.forEach(producto => {
+				producto.Mostrar()
+			})
+
+		}) 
+		
+		promesa.catch(function(rta){ //<-- esto ocurre cuando sale mal
+			document.querySelector("#productos-destacados").innerHTML = `<div class="alert alert-danger" role="alert">${rta}</div>`
+			
+		})	
+
+		promesa.finally (function(){
+			confirm ("funciono?")
+		})
+
+		///////////////////////////////////////////////////
+
+		
 		</script>
 	
 	</body>
