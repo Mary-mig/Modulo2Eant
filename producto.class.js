@@ -57,8 +57,13 @@ class Producto {
 	 }
 
 	// Metodos de Clase (estatico)
-	static parse(json){//<-- Aca ingresan los datos del json
-		let datos = JSON.parse (json)//<-- de JSON a Object
+	static parse(json){//<-- Aca ingresan los datos del json y se convierten en obtejos "Producto"
+		
+		//let datos = JSON.parse (json)//<-- de JSON a Object
+
+		//let datos = json
+
+		let datos = (typeof json == "string") ? JSON.parse(json) : json
 
 		console.log("Estos son los datos")
 		console.log(datos)

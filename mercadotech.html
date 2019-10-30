@@ -68,7 +68,7 @@
 		//window.localStorage.clear()//--> vacia todo
 
 		// YO, JS PROMETO CONVERTIR MOSTRAR PRODUCTOS CUANDO TENGA DATOS// encadena acciones y reacciones, si se cumplio la condición se ejecuta 
-
+	/*
 		const promesa = new Promise(function(ok,error){
 		 
 		 if(!window.localStorage.getItem("PRODUCTOS")){
@@ -80,9 +80,9 @@
 			
 			// Guardar los datos de la peticion
 			window.localStorage.setItem("PRODUCTOS",this.response )
-
 			ok(this.response) //<-- Ejecutar el metodo then()...
-			{ else }
+			
+		}else{
 			 	this.onerror()
 		 	}
 		}
@@ -98,9 +98,9 @@
 	}
 })
 
-		promesa.then (function(rta){     //<-- esto ocurre cuando hay datos (desde una API o de un LS)
-			//Usar los daros para crear/mostrar obejto Producto
-			let productos = Producto.parse (rta)
+		promesa.then(function(rta){     //<-- esto ocurre cuando hay datos (desde una API o de un LS)
+			//Usar los datos para crear/mostrar obejto Producto
+			let productos = Producto.parse(rta)
 
 			productos.forEach(producto => {
 				producto.Mostrar()
@@ -113,12 +113,55 @@
 			
 		})	
 
-		promesa.finally (function(){
+		promesa.finally(function(){
 			confirm ("funciono?")
+		}) 
+
+	*/
+
+		/* AJAX moderno con el metodo fetch */
+
+		const crearCatalogo = function(items){
+			let productos = Producto.parse(items)
+			productos.forEach(producto =>{producto.Mostrar() })
+		}
+		if(!window.localStorage.getItem("PRODUCTOS")){ //Obtener los datos de la API
+		fetch("https://api.myjson.com/bins/dcg2p")
+		.then(rta =>rta.json() )
+		.then(items=>{
+			window.localStorage.setItem("PRODUCTOS",JSON.stringify(items))	
+			crearCatalogo(items)//<-- Los paso como Object
 		})
 
-		///////////////////////////////////////////////////
+	}else{	//Obtener los datos del localStorage
+		crearCatalogo(window.localStorage.getItem("PRODUCTOS"))//<-- los paso como string
+	}
 
+
+
+		/* Funcionalidad Modelo:
+
+		fetch("https://api.myjson.com/bins/dcg2p").then(function(rta){
+			
+			return rta.json()
+
+		}).then(function(items){
+
+			return items[2]
+
+		}).then(function(item){
+
+			return item.Nombre
+
+		}).then(function(nombre){
+
+			return nombre.substr(0,1)
+
+		}).then(function(letra){
+
+			console.log(`La primer letra es: ${letra}`)
+
+		}) */
 		
 		</script>
 	
