@@ -8,6 +8,11 @@ class Producto {
 		this.precio = p
 		this.imagen = i
 		this.disponibilidad = d //<-- por default asigna "true"
+		this.vDOM = document.createElement("article")//<- creo la etiqueta article<article></article>
+		this.state = {
+			anexado : false, 
+			version : 0,
+		}
 	}
 
 
@@ -27,17 +32,10 @@ class Producto {
 
 	set Disponibilidad(value){
 
-		if(value == this.disponibilidad){
-			alert("La disponibilidad ya esta en: " + value)
-			return
-		}
+		let accion = value ? "habilitar" : "deshabilitar"
 
-		let estado = value ? "habilitar" : "deshabilitar"
-
-		if(confirm(`Desea ${estado} el producto"${this.nombre}"`)){
+		if(confirm(`Desea ${accion} el producto"${this.nombre}"`))
 			this.disponibilidad = value
-		}
-
 	}	
 
 
@@ -48,29 +46,54 @@ class Producto {
 			ficha.querySelector(".card-body h5").innerText = this.Precio
 			ficha.querySelector(".card-img-top").src = this.imagen
 			ficha.classList.remove("d-none")*/
+		/*let fondo = "bg-white"
+		let texto = "text-dark"
 
-		let ficha = document.createElement("article")//<- creo la etiqueta article<article></article>
-			ficha.classList.add("col-lg-4","col-md-6","mb-4","producto")//<- le creo el class <article class=col-lg-4 col-md-6 mb-4 d-none producto>
+		if(this.stock<= 0){
+			fondo = "bg-dark"
+			texto = "text-light"
+		}*/
 
-			ficha.innerHTML = `<div class="card h-100 bg-dark text-light">
-								<a href="#">
-								<img class="card-img-top" src="${this.imagen}" alt="${this.nombre}">
-		  						</a>
-								<div class="card-body">
-									<h4 class="card-title">
-				  					<a href="#">${this.nombre}</a>
-									</h4>
-									<h5 class="btn-warning"> ${this.Precio}</h5>
-									<p class="card-text">${this.stock} unid.</p>
-								</div>
-							 </div>`
+		let estilo = this.disponibilidad ? "bg-white text-dark" : "bg-dark text-light"
+
+					
+			// Manipulacion de estructura
+			this.vDOM.classList.add("col-lg-4","col-md-6","mb-4","producto")//<- le creo el class <article class=col-lg-4 col-md-6 mb-4 d-none producto>
+
+			// Manipulacion de Contenido
+			this.vDOM.innerHTML = `<div class="card h-100 ${estilo}">
+									<a href="#">
+									<img class="card-img-top" src="${this.imagen}" alt="${this.nombre}">
+			  						</a>
+									<div class="card-body">
+										<h4 class="card-title">
+					  					<a href="#">${this.nombre}</a>
+										</h4>
+										<h5 class="btn btn-warning m-0"> ${this.Precio}</h5>
+										<button class="btn  btn-danger">${this.disponibilidad ?"Desactivar":"Activar"}</button>
+										<p class="card-text">${this.stock} unid.</p>
+									</div>
+							 	  </div>`
 	
-			
-		document.querySelector(selector).appendChild(ficha)
+			// Manipulacion de Comportamiento
+			this.vDOM.querySelector("button").onclick = (e)=>{
+				this.Disponibilidad= !this.disponibilidad
+				
+				this.Precio = prompt("Ingrese nuevo precio:")
 
-		console.log (ficha)
+				this.Mostrar() //<-- este this remite al producto que tiene nombre, precio, stock, etc
+
+				console.log(this)//<-- El objeto padre
+				console.log (e.target)//<-- El objeto que provoca el evento
+			}
+			//Anexarlo (mostrarlo) en la interfaz
+			if (!this.state.anexado ){	
+			document.querySelector(selector).appendChild(this.vDOM)
+			this.state.anexado = true
+		}
 
 	 }
+		
 
 	// Metodos de Clase (estatico)
 	static parse(json){//<-- Aca ingresan los datos del json y se convierten en obtejos "Producto"
