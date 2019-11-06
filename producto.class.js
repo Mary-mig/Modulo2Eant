@@ -1,8 +1,9 @@
 class Producto {
 
 	//Constructor: es una funcion que recibe los datos y los asigna a propiedades
-	constructor(n,s,p,i,d = true){
+	constructor(id,n,s,p,i,d = true){
 		//Atributos
+		this.ID = id
 		this.nombre = n
 		this.stock = s
 		this.precio = p
@@ -61,6 +62,8 @@ class Producto {
 			// Manipulacion de estructura
 			this.vDOM.classList.add("col-lg-4","col-md-6","mb-4","producto")//<- le creo el class <article class=col-lg-4 col-md-6 mb-4 d-none producto>
 
+			this.vDOM.id = `prod-${this.ID}`
+
 			// Manipulacion de Contenido
 			this.vDOM.innerHTML = `<div class="card h-100 ${estilo}">
 									<a href="#">
@@ -107,6 +110,8 @@ class Producto {
 			document.querySelector(selector).appendChild(this.vDOM)
 			this.state.anexado = true
 		}
+
+			this.sincronizar()
 	}
 	aplicarDescuento(valor = null){
 			
@@ -117,7 +122,29 @@ class Producto {
 			this.Mostrar()
 		}
 
-		
+	sincronizar(){
+		//¿como?
+		console.log(this.ID) // <-- ej:7 
+
+		let storage = JSON.parse(localStorage.getItem("PRODUCTOS"))//<-- de JSON a object
+
+		storage.forEach(item => {
+
+			if ( item.idProducto == this.ID ){
+
+				item.Nombre = this.nombre
+				item.Precio = this.precio
+				item.Stock = this.stock
+				item.Disponibilidad = this.disponibilidad
+				return
+			}
+		})
+
+		localStorage.setItem("PRODUCTOS",JSON.stringify(storage))//<-- de Object a JSON
+
+	}	
+
+
 	// Metodos de Clase (estatico)
 	static parse(json){//<-- Aca ingresan los datos del json y se convierten en obtejos "Producto"
 		
@@ -128,16 +155,16 @@ class Producto {
 		let datos = (typeof json == "string") ? JSON.parse(json) : json
 
 		console.log("Estos son los datos")
-		console.log(datos)
+		
 
 		if(datos instanceof Array){
 			 
 		//1) Recorrer el array de object para instanciar objetos producto y retornarlos
-		 return datos.map(item => new Producto(item.Nombre,item.Stock,item.Precio,item.Imagen))
+		 return datos.map(item => new Producto(item.idProducto,item.Nombre,item.Stock,item.Precio,item.Imagen))
 			
 		}else if (datos instanceof Object){
 		 
-		 return new Producto(datos.Nombre,datos.Stock,datos.Precio,datos.Imagen)//<-- Si el JSON tuviera un solo dato no hace falta armar el array ni el for each
+		 return new Producto(datos.idProducto,datos.Nombre,datos.Stock,datos.Precio,datos.Imagen)//<-- Si el JSON tuviera un solo dato no hace falta armar el array ni el for each
 			
 		}else {
 			console.error("ya fue.. no convierto nada en Producto")
