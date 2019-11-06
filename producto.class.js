@@ -55,6 +55,7 @@ class Producto {
 		}*/
 
 		let estilo = this.disponibilidad ? "bg-white text-dark" : "bg-dark text-light"
+		let botones = this.disponibilidad ?"btn-danger" : "btn-success"
 
 					
 			// Manipulacion de estructura
@@ -69,32 +70,54 @@ class Producto {
 										<h4 class="card-title">
 					  					<a href="#">${this.nombre}</a>
 										</h4>
-										<h5 class="btn btn-warning m-0"> ${this.Precio}</h5>
-										<button class="btn  btn-danger">${this.disponibilidad ?"Desactivar":"Activar"}</button>
+										<h5 class="btn btn-warning  btn-precio m-0"> ${this.Precio}</h5>
+										
+										<button class="btn  ${botones} btn-disponible">${this.disponibilidad ?"Desactivar":"Activar"}</button>
+										<button class = "btn btn-primary btn-descuento"> Aplicar descuento </button>
 										<p class="card-text">${this.stock} unid.</p>
 									</div>
 							 	  </div>`
 	
 			// Manipulacion de Comportamiento
-			this.vDOM.querySelector("button").onclick = (e)=>{
+			this.vDOM.querySelector(".btn-disponible").onclick = (e)=>{
 				this.Disponibilidad= !this.disponibilidad
 				
-				this.Precio = prompt("Ingrese nuevo precio:")
-
 				this.Mostrar() //<-- este this remite al producto que tiene nombre, precio, stock, etc
 
 				console.log(this)//<-- El objeto padre
 				console.log (e.target)//<-- El objeto que provoca el evento
 			}
+
+			this.vDOM.querySelector(".btn-precio").onclick = () =>{
+				this.Precio = prompt (`Por favor indique el nuevo valor del articulo ${this.nombre}`)
+				this.Mostrar()
+			}
+
+		/*	this.vDOM.querySelector(".btn-descuento").onclick =  function() {
+				let valor =  prompt(`Indique el % de descuento para ${this.nombre}`)
+				this.aplicarDescuento(valor)
+				this.Mostrar()
+			}
+		*/
+
+			this.vDOM.querySelector(".btn-descuento").onclick = this.aplicarDescuento.bind(this)
+
 			//Anexarlo (mostrarlo) en la interfaz
 			if (!this.state.anexado ){	
 			document.querySelector(selector).appendChild(this.vDOM)
 			this.state.anexado = true
 		}
+	}
+	aplicarDescuento(valor = null){
+			
+			valor = isNaN(valor) ?  prompt(`Indique el % de descuento para ${this.nombre}`) : valor
+			
+			let importe = (this.precio * valor)/100
+			this.precio =  this.precio - importe
+			this.Mostrar()
+		}
 
-	 }
 		
-
 	// Metodos de Clase (estatico)
 	static parse(json){//<-- Aca ingresan los datos del json y se convierten en obtejos "Producto"
 		
