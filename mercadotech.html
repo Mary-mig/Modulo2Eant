@@ -45,13 +45,16 @@
 		<script>
 		///// LOGIN CON GOOGLE/////
 
-		gapi.load(auth2, function(){
-			windoe.auth = gapi.auth2.init({
+		gapi.load("auth2", function(){
+			window.auth = gapi.auth2.init({
 				client_id:"285359600635-f6tjgnsmcrcorrvpb9afoa81ogkc98bl.apps.googleusercontent.com",
 				cookiepolicy:"single_host_origin"
 			})
 		})
 
+		//Metodos importantes de Google Sign In
+		//-----------------------------------------
+		//auth.isSignedIn.get()//<-- Chequea si esta logueado (true/false)
 		///// LOGIN CON GOOGLE/////
 
 		/*Persistencia en JS con la API Storage */
