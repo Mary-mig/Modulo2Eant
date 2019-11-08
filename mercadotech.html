@@ -40,9 +40,20 @@
 		</footer>
 		<script src="https://blackrockdigital.github.io/startbootstrap-shop-item/vendor/jquery/jquery.min.js"></script>
 		<script src="https://blackrockdigital.github.io/startbootstrap-shop-item/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<script src="https://apis.google.com/js/api:client.js"></script>
 		<script src= "producto.class.js"></script>
 		<script>
-		
+		///// LOGIN CON GOOGLE/////
+
+		gapi.load(auth2, function(){
+			windoe.auth = gapi.auth2.init({
+				client_id:"285359600635-f6tjgnsmcrcorrvpb9afoa81ogkc98bl.apps.googleusercontent.com",
+				cookiepolicy:"single_host_origin"
+			})
+		})
+
+		///// LOGIN CON GOOGLE/////
+
 		/*Persistencia en JS con la API Storage */
 		//window.localStorage & window.sessionStorage//
 
@@ -108,26 +119,25 @@
 		const crearCatalogo = function(items){
 			let productos = Producto.parse(items)
 
-			let descuento = confirm("Aplicar descuento de 50%?") ? 50 : -1
+			//let descuento = confirm("Aplicar descuento de 50%?") ? 50 : -1
 
 			productos.forEach(producto =>{
 				
 				producto.Mostrar("#productos-destacados") 
-				producto.aplicarDescuento(descuento) })
-		}
-		if(!window.localStorage.getItem("PRODUCTOS")){ //Obtener los datos de la API
-		fetch("https://api.myjson.com/bins/dcg2p")
-		.then(rta =>rta.json() )
-		.then(items=>{
-			window.localStorage.setItem("PRODUCTOS",JSON.stringify(items))	
-			crearCatalogo(items)//<-- Los paso como Object
+				//producto.aplicarDescuento(30) })
 		})
-
-	}else{	//Obtener los datos del localStorage
-		crearCatalogo(window.localStorage.getItem("PRODUCTOS"))//<-- los paso como string
 	}
 
-
+		if( !window.localStorage.getItem("PRODUCTOS") ){ // ↓ Obtener los datos de la API
+				fetch("https://api.myjson.com/bins/dcg2p")
+				.then(rta => rta.json() )
+				.then(items => {
+					window.localStorage.setItem("PRODUCTOS", JSON.stringify(items) )
+					crearCatalogo(items) //<-- Los paso como Object
+				})
+			} else { // ↓ Obtener los datos del Local Storage
+				crearCatalogo( window.localStorage.getItem("PRODUCTOS") ) //<-- Los paso como String
+			}
 
 		/* Funcionalidad Modelo:
 
